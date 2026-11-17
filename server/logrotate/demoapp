@@ -1,0 +1,12 @@
+/var/log/demoapp/access.log {
+    daily
+    rotate 14
+    missingok
+    notifempty
+    compress
+    create 0640 root logsentry
+    sharedscripts
+    postrotate
+        docker kill -s USR1 demo-nginx >/dev/null 2>&1 || true
+    endscript
+}
