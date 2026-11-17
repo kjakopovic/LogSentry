@@ -4,6 +4,7 @@ import os
 import random
 import secrets
 import time
+import uuid
 from collections import Counter
 from collections.abc import AsyncIterator
 from contextlib import asynccontextmanager
@@ -15,8 +16,9 @@ from fastapi.responses import JSONResponse, PlainTextResponse
 from pydantic import BaseModel, Field
 
 from app import db
+from app.logging_setup import request_context, setup_logging
 
-logging.basicConfig(level=logging.INFO, format="%(asctime)s %(levelname)-8s %(name)s: %(message)s")
+setup_logging()
 
 log = logging.getLogger("demoapp.api")
 http_log = logging.getLogger("demoapp.http")
@@ -52,6 +54,7 @@ async def observe_requests(request: Request, call_next) -> Response:
 
     method, path = request.method, request.url.path
     client_ip = request.headers.get("x-real-ip") or request.client.host
+    request_context.set({"request_id": uuid.uuid4().hex[:12], "client_ip": client_ip})
 
     start = time.perf_counter()
     try:
@@ -81,7 +84,6 @@ async def observe_requests(request: Request, call_next) -> Response:
                 "path": path,
                 "status": response.status_code,
                 "duration_ms": round(duration_ms, 1),
-                "client_ip": client_ip,
             }
         },
     )

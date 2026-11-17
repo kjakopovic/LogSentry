@@ -27,9 +27,12 @@ services:
     user: "${APP_UID:-1000}:${APP_GID:-1000}"
     environment:
       DATABASE_URL: "postgresql://demo:${POSTGRES_PASSWORD:?postavi POSTGRES_PASSWORD u .env}@postgres:5432/demo"
+      LOG_FILE: /logs/app.log
     ports:
       # Samo na loopbacku: do /health i /metrics dolazi se kroz SSH tunel.
       - "127.0.0.1:${API_PORT:-8000}:8000"
+    volumes:
+      - ${LOG_DIR:-./logs}:/logs
     depends_on:
       postgres:
         condition: service_healthy
