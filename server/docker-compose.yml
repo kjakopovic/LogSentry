@@ -66,6 +66,15 @@ services:
       retries: 10
     logging: *logging
 
+  traffic-gen:
+    build: ./traffic_gen
+    container_name: demo-traffic
+    restart: unless-stopped
+    command: ["normal", "--base-url", "http://nginx", "--rate", "${TRAFFIC_RATE:-1}"]
+    depends_on:
+      - nginx
+    logging: *logging
+
 networks:
   default:
     ipam:
