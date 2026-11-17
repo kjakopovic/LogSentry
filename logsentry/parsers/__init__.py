@@ -1,0 +1,1 @@
+"""Parseri formata logova."""

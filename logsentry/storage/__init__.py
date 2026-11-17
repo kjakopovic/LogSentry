@@ -1,0 +1,1 @@
+"""Lokalna SQLite baza."""

@@ -1,0 +1,20 @@
+# Python
+__pycache__/
+*.py[cod]
+*.egg-info/
+.venv/
+venv/
+dist/
+build/
+.pytest_cache/
+.ruff_cache/
+
+# Tajne i lokalna konfiguracija
+.env
+
+# Lokalni logovi i baza
+server/logs/*
+!server/logs/.gitkeep
+*.db
+*.db-wal
+*.db-shm
